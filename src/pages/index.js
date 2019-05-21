@@ -9,6 +9,7 @@ import Reducer from '../components/reducer';
 
 const TreeNode = Tree.TreeNode;
 const Panel = Collapse.Panel;
+const Search = Input.Search;
 
 function Index(props) {
     
@@ -79,12 +80,25 @@ function Index(props) {
     }
 
     function showSingle(){
+        if (!current.url) return "请选择一个接口";
         return <div>
             当前接口：{current.summary}( {current.url} )
             <h2>Request:</h2>
             {current.parameters && getSchema(current.parameters[0].schema.originalRef)}
             <h2>Response:</h2>
             {current.responses && getSchema(current.responses["200"].schema.originalRef)}
+            <h2>Code:</h2>
+            <Collapse>
+                <Panel header="Services">
+                    {Service(current)}
+                </Panel>
+                <Panel header="Effects">
+                    {Effect(current)}
+                </Panel>
+                <Panel header="Reducers">
+                    {Reducer(current)}
+                </Panel>
+            </Collapse>
         </div>
     }
 
@@ -121,6 +135,7 @@ function Index(props) {
             </div>
             <Row className={styles.contain} gutter={15}>
                 <Col span={8}>
+                    <Search placeholder="模糊搜索" />
                     <Tree
                         onSelect={changeCurrent}
                     >
