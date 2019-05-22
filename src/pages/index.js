@@ -43,6 +43,13 @@ function Index(props) {
         </div>
     }
 
+    function urlTitle(url){
+        return <div>
+            {url.summary} &nbsp;
+            <span className={styles.blueText} onClick={generateCode.bind(null, url)}>({url.alias})</span>
+        </div>
+    }
+
     function generateCode(tag,e){
         e.stopPropagation();
         props.dispatch({
@@ -74,6 +81,10 @@ function Index(props) {
                 
             }else{
                 result[i] = schema.properties[i].description;
+                if (schema.properties[i].enum){
+                    result[i] += "  ";
+                    result[i] += schema.properties[i].enum.toString();
+                }
             }
         }
         return result;
@@ -142,7 +153,7 @@ function Index(props) {
                         {props.data.map(tag=>{
                             return <TreeNode title={tagTitle(tag)} key={tag.description}>
                                 {tag.urls.map(url=>{
-                                    return <TreeNode title={url.summary} key={url.url} data={url} />
+                                    return <TreeNode title={urlTitle(url)} key={url.url} data={url} />
                                 })}
                             </TreeNode>
                         })}
