@@ -1,4 +1,5 @@
 const {app,BrowserWindow,ipcMain,net} = require("electron");
+const isDev = require('electron-is-dev');
 
 let win;
 
@@ -7,12 +8,17 @@ function createWindow(){
 		width:1200, 
 		height:800,
 		webPreferences: {
-			nodeIntegration: true
+			nodeIntegration: true,
+			webSecurity: false
 		}
 	});
-	//win.loadFile('index.html');
-	win.loadURL("http://localhost:8000/");
-	win.webContents.openDevTools();
+	win.setTitle("codeGenerator");
+	if(isDev){
+		win.loadURL("http://localhost:8000/");
+		win.webContents.openDevTools();
+	}else{
+		win.loadFile('./build/index.html');
+	}
 	
 }
 

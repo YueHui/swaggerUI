@@ -4,6 +4,7 @@ export default {
     treeShaking: true,
     publicPath:'./',
     history:'hash',
+    outputPath:"./build",
     plugins: [
         // ref: https://umijs.org/plugin/umi-plugin-react.html
         ['umi-plugin-react', {
