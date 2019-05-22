@@ -1,6 +1,7 @@
 
 import {connect} from 'dva';
 import { Form, Input, Row, Col, message, Button, Tree, Collapse} from 'antd';
+import {useState} from 'react';
 import ReactJson from 'react-json-view'
 import styles from './index.less';
 import Service from '../components/service';
@@ -15,6 +16,8 @@ function Index(props) {
     
     const {getFieldDecorator,getFieldValue} = props.form;
     const current = props.current;
+    const [expandedKeys,setExpandedKeys] = useState([]);
+    const [searchValue,setSearchValue] = useState('');
     
     function getJSON(e){
         let url = getFieldValue("jsonURL");
@@ -44,9 +47,12 @@ function Index(props) {
     }
 
     function urlTitle(url){
+        const index = url.summary.indexOf(searchValue);
+        const beforeStr = url.summary.substr(0, index);
+        const afterStr = url.summary.substr(index + searchValue.length);
         return <div>
-            {url.summary} &nbsp;
-            <span className={styles.blueText} onClick={generateCode.bind(null, url)}>({url.alias})</span>
+            {index>=0?<span>{beforeStr}<span style={{ color: '#f50' }}>{searchValue}</span>{afterStr}</span>:url.summary} &nbsp;
+            <span className={styles.blueText} >({url.alias})</span>
         </div>
     }
 
@@ -134,6 +140,26 @@ function Index(props) {
         </Collapse>
     }
 
+    function onExpand(expandedKeys){
+        setExpandedKeys(expandedKeys);
+    }
+
+    function searchTree(e){
+        let value = e.target.value;
+        if(!value) return;
+        value = value.trim();
+        const expandedKeys = [];
+        props.data.map(tag=>{
+            tag.urls.map(url=>{
+                if(url.summary.indexOf(value)>=0 || url.url.indexOf(value)>=0){
+                    expandedKeys.push(url.url);
+                }
+            })
+        })
+        setExpandedKeys(expandedKeys);
+        setSearchValue(value);
+    }
+
     return (
         <div>
             <div>
@@ -146,18 +172,23 @@ function Index(props) {
             </div>
             <Row className={styles.contain} gutter={15}>
                 <Col span={8}>
-                    <Search placeholder="模糊搜索" />
-                    <Tree
-                        onSelect={changeCurrent}
-                    >
-                        {props.data.map(tag=>{
-                            return <TreeNode title={tagTitle(tag)} key={tag.description}>
-                                {tag.urls.map(url=>{
-                                    return <TreeNode title={urlTitle(url)} key={url.url} data={url} />
-                                })}
-                            </TreeNode>
-                        })}
-                    </Tree>
+                    <Search placeholder="模糊搜索" onChange={searchTree} />
+                    <div className={styles.treeContain}>
+                        <Tree
+                            onSelect={changeCurrent}
+                            expandedKeys={expandedKeys}
+                            onExpand={onExpand}
+                            autoExpandParent
+                        >
+                            {props.data.map(tag => {
+                                return <TreeNode title={tagTitle(tag)} key={tag.description}>
+                                    {tag.urls.map(url => {
+                                        return <TreeNode title={urlTitle(url)} key={url.url} data={url} />
+                                    })}
+                                </TreeNode>
+                            })}
+                        </Tree>
+                    </div>
                 </Col>
                 <Col span={16}>
                     {props.showMode=="single"?showSingle():showBatch()}
