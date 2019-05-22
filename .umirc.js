@@ -2,6 +2,8 @@
 // ref: https://umijs.org/config/
 export default {
     treeShaking: true,
+    publicPath:'./',
+    history:'hash',
     plugins: [
         // ref: https://umijs.org/plugin/umi-plugin-react.html
         ['umi-plugin-react', {
@@ -23,7 +25,6 @@ export default {
         }],
     ],
     chainWebpack(config,{webpack}){
-        console.log(config.target.toString())
         config.target("electron-renderer");
     },
 }
