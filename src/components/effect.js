@@ -1,3 +1,5 @@
+import { firstToUpper} from '../util/util';
+
 export default function (url) {
 	return <div
 		key={url.url}
@@ -5,15 +7,15 @@ export default function (url) {
 		dangerouslySetInnerHTML={{
 			__html: `
 				/** ${url.summary} */ <br/>
-				*getExerciseTypes({payload},{put,call}){ <br />
+				*${url.alias}({payload},{put,call}){ <br />
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					const exerciseTypes = yield call(services.getExerciseTypes,payload); <br />
+					const ${url.alias} = yield call(services.${url.alias},payload); <br />
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					yield put({<br />
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						type:"updateExerciseTypes",<br />
+						type:"update${firstToUpper(url.alias)}",<br />
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						exerciseTypes<br />
+						${url.alias}<br />
 						&nbsp;&nbsp;&nbsp;&nbsp;
 					})<br />
 				},

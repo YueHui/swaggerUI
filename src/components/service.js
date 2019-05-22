@@ -5,10 +5,10 @@ export default function(url){
 		dangerouslySetInnerHTML={{
 			__html: `
 				/** ${url.summary} */ <br/>
-				export async function ${url.url.split("/")[1]}(data) { <br/>
+				export async function ${url.alias}(data) { <br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					return request('${url.url}',data); <br />
-				}
+				},
 			`}}
 	/>
 }

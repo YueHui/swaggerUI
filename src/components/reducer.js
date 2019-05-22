@@ -1,3 +1,5 @@
+import { firstToUpper } from '../util/util';
+
 export default function(url){
 	return <div 
 		key={url.url} 
@@ -5,10 +7,10 @@ export default function(url){
 		dangerouslySetInnerHTML={{
 			__html: `
 				/** ${url.summary} */ <br/>
-				export async function ${url.url.split("/")[1]}(data) { <br/>
+				update${firstToUpper(url.alias)}(state,{${url.alias}}) { <br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					return request('${url.url}',data); <br />
-				}
+					return {...state,${url.alias}}<br />
+				},
 			`}}
 	/>
 }
