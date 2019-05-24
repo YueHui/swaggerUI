@@ -18,7 +18,7 @@ export default function (url) {
 						${url.alias}<br />
 						&nbsp;&nbsp;&nbsp;&nbsp;
 					})<br />
-				},
+				}
 			`}}
 	/>
 }

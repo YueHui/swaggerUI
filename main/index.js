@@ -13,6 +13,9 @@ function createWindow(){
 		}
 	});
 	win.setTitle("codeGenerator");
+	win.on('closed', () => {
+		win = null
+	})
 	if(isDev){
 		win.loadURL("http://localhost:8000/");
 		win.webContents.openDevTools();
@@ -52,7 +55,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
 	// 在macOS上，当单击dock图标并且没有其他窗口打开时，
 	// 通常在应用程序中重新创建一个窗口。
-	//if (win === null) {
+	if (win === null) {
 		createWindow()
-	//}
+	}
 })
