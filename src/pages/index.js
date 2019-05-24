@@ -160,6 +160,12 @@ function Index(props) {
         setSearchValue(value);
     }
 
+    function showConsole(){
+        props.dispatch({
+            type:"global/showConsole",
+        })
+    }
+
     return (
         <div>
             <div>
@@ -169,6 +175,8 @@ function Index(props) {
                 })(<Input placeholder="swagger文档地址" style={{ width: 200 }} onPressEnter={getJSON} />)}
                 &nbsp;&nbsp;
                 <Button type="primary" onClick={getJSON}>查询</Button>
+                &nbsp;&nbsp;
+                <Button type="primary" onClick={showConsole}>Console</Button>
             </div>
             <Row className={styles.contain} gutter={15}>
                 <Col span={8}>

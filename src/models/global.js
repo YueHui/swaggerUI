@@ -48,6 +48,9 @@ export default {
 				originData
 			})
 			
+		},
+		showConsole(){
+			ipcRenderer.send("showConsole");
 		}
 	},
 	reducers:{
@@ -79,3 +82,4 @@ function getData(url){
 		}, 5000);
 	})
 }
+

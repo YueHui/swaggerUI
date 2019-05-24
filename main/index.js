@@ -41,6 +41,12 @@ ipcMain.on("getData",function(e,url){
 	request.end()
 })
 
+ipcMain.on("showConsole",function(){
+	if(win !== null){
+		win.webContents.openDevTools();
+	}
+})
+
 app.on('ready', createWindow);
 
 // 当全部窗口关闭时退出。
