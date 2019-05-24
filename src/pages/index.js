@@ -32,7 +32,7 @@ function Index(props) {
     }
 
     function changeCurrent(selectedKeys,e){
-        if (!e.selected) return;
+        if (!e.selected || !e.node.props.data) return;
         props.dispatch({
             type:"global/updateCurrent",
             current: e.node.props.data
