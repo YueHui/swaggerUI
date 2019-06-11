@@ -8,7 +8,7 @@ export default function(url){
 				export async function ${url.alias}(data) { <br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					return request('${url.url}',data); <br />
-				},
+				}
 			`}}
 	/>
 }
