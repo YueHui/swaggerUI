@@ -74,22 +74,35 @@ function Index(props) {
         //return schema.properties;
         let result = {};
         for(let i in schema.properties){
-            
+            let name = i;
+            if(schema.required && schema.required.indexOf(i)>=0){
+                name = '*'+i;
+            }
             if (schema.properties[i].originalRef){
-                result[i] = getPropties(props.originData.definitions[schema.properties[i].originalRef]);
+                result[name] = getPropties(props.originData.definitions[schema.properties[i].originalRef]);
             } else if (schema.properties[i].items){
                 //如果不是树循环
                 if (schema.properties[i].items.originalRef && schema.properties[i].items.originalRef != key){
-                    result[i] = getPropties(props.originData.definitions[schema.properties[i].items.originalRef], schema.properties[i].items.originalRef);
+                    if (schema.properties[i].type === "array"){
+                        result[name] = [];
+                        result[name].push(getPropties(props.originData.definitions[schema.properties[i].items.originalRef], schema.properties[i].items.originalRef));    
+                    }else{
+                        result[name] = getPropties(props.originData.definitions[schema.properties[i].items.originalRef], schema.properties[i].items.originalRef);
+                    }
                 }else{
-                    result[i] = i;
+                    if (schema.properties[i].type === "array") {
+                        result[name] = [];
+                        result[name].push(i);
+                    }else{
+                        result[name] = i;
+                    }
                 }
                 
             }else{
-                result[i] = schema.properties[i].description;
+                result[name] = schema.properties[i].description;
                 if (schema.properties[i].enum){
-                    result[i] += "  ";
-                    result[i] += schema.properties[i].enum.toString();
+                    result[name] += "  ";
+                    result[name] += schema.properties[i].enum.toString();
                 }
             }
         }

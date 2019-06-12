@@ -41,7 +41,7 @@ export default {
 				}
 				
 			}
-			console.log(originData,data);
+			//console.log(originData,data);
 			yield put({
 				type:"updateData",
 				data,
