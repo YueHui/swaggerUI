@@ -78,6 +78,7 @@ function Index(props) {
             if(schema.required && schema.required.indexOf(i)>=0){
                 name = '*'+i;
             }
+            
             if (schema.properties[i].originalRef){
                 result[name] = getPropties(props.originData.definitions[schema.properties[i].originalRef]);
             } else if (schema.properties[i].items){
@@ -114,7 +115,7 @@ function Index(props) {
         return <div>
             当前接口：{current.summary}( {current.url} )
             <h2>Request:</h2>
-            {current.parameters && getSchema(current.parameters[0].schema.originalRef)}
+            {current.parameters && current.parameters[0].schema && getSchema(current.parameters[0].schema.originalRef)}
             <h2>Response:</h2>
             {current.responses && getSchema(current.responses["200"].schema.originalRef)}
             <h2>Code:</h2>
