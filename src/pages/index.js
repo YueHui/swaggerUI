@@ -7,6 +7,7 @@ import styles from './index.less';
 import Service from '../components/service';
 import Effect from '../components/effect';
 import Reducer from '../components/reducer';
+import {copy} from '../util/util';
 
 const TreeNode = Tree.TreeNode;
 const Panel = Collapse.Panel;
@@ -42,7 +43,7 @@ function Index(props) {
     function tagTitle(tag){
         return <div>
             {tag.tagName} &nbsp;
-            <span className={styles.blueText} onClick={generateCode.bind(null,tag)}>生成代码</span>
+            <span className="blueText" onClick={generateCode.bind(null,tag)}>生成代码</span>
         </div>
     }
 
@@ -51,8 +52,8 @@ function Index(props) {
         const beforeStr = url.summary.substr(0, index);
         const afterStr = url.summary.substr(index + searchValue.length);
         return <div>
-            {index>=0?<span>{beforeStr}<span style={{ color: '#f50' }}>{searchValue}</span>{afterStr}</span>:url.summary} &nbsp;
-            <span className={styles.blueText} >({url.alias})</span>
+            {index >= 0 ? <span>{beforeStr}<span style={{ color: '#f50' }}>{searchValue}</span>{afterStr}</span> : url.url == searchValue ? <span style={{ color: '#f50' }}>{url.summary}</span>:url.summary} &nbsp;
+            <span className="blueText" >({url.alias})</span>
         </div>
     }
 
@@ -113,20 +114,20 @@ function Index(props) {
     function showSingle(){
         if (!current.url) return "请选择一个接口";
         return <div>
-            当前接口：{current.summary}( {current.url} )
+            当前接口：{current.summary}( <span className="blueText" onClick={copy.bind(null,current.url)}>{current.url}</span> )
             <h2>Request:</h2>
             {current.parameters && current.parameters[0].schema && getSchema(current.parameters[0].schema.originalRef)}
             <h2>Response:</h2>
             {current.responses && getSchema(current.responses["200"].schema.originalRef)}
             <h2>Code:</h2>
             <Collapse>
-                <Panel header="Services">
+                <Panel header="Services (可点击复制)">
                     {Service(current)}
                 </Panel>
-                <Panel header="Effects">
+                <Panel header="Effects (可点击复制)">
                     {Effect(current)}
                 </Panel>
-                <Panel header="Reducers">
+                <Panel header="Reducers (可点击复制)">
                     {Reducer(current)}
                 </Panel>
             </Collapse>

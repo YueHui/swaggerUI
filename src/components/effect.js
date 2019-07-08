@@ -1,9 +1,10 @@
-import { firstToUpper} from '../util/util';
+import { firstToUpper,copy} from '../util/util';
 
 export default function (url) {
 	return <div
 		key={url.url}
-		style={{ marginBottom: 5 }}
+		style={{ marginBottom: 5,cursor:'pointer' }}
+		onClick={(e) => copy(e.currentTarget.innerText)}
 		dangerouslySetInnerHTML={{
 			__html: `
 				/** ${url.summary} */ <br/>

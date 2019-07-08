@@ -6,3 +6,5 @@ html, body, #root {
 body {
   margin: 0;
 }
+
+.blueText{color:#2593fc; cursor: pointer;}
