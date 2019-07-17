@@ -167,7 +167,7 @@ function Index(props) {
         props.data.map(tag=>{
             tag.urls.map(url=>{
                 if(url.summary.indexOf(value)>=0 || url.url.indexOf(value)>=0){
-                    expandedKeys.push(url.url);
+                    expandedKeys.push(tag.description);
                 }
             })
         })
