@@ -9,7 +9,7 @@ function Index(props) {
 
     const {getFieldDecorator,getFieldValue} = props.form;
     // 当前显示 apis/enums
-    const [showType,setShowType] = useState('enums');
+    const [showType,setShowType] = useState('apis');
 
     function getJSON(e){
         let url = getFieldValue("jsonURL");
