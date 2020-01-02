@@ -4,21 +4,20 @@
     "description": "",
     "main": "main/index.js",
     "scripts": {
-        "start": "electron .",
+        "start": "concurrently -c 'red,green' --names 'web,electron' 'umi dev' 'electron .' ",
         "build": "./node_modules/.bin/electron-builder build",
-        "startWeb": "umi dev",
         "buildWeb": "umi build",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
     "license": "ISC",
-    "build":{
-        "appId":"com.kongyuehui.app",
-        "productName":"codeGenerator",
-        "mac":{
-            "target":"dmg"
+    "build": {
+        "appId": "com.kongyuehui.app",
+        "productName": "codeGenerator",
+        "mac": {
+            "target": "dmg"
         },
-        "files":[
+        "files": [
             "package.json",
             "build/*",
             "main/*",
@@ -39,6 +38,7 @@
     },
     "devDependencies": {
         "babel-eslint": "^9.0.0",
+        "concurrently": "^5.0.2",
         "electron": "^5.0.1",
         "electron-builder": "^20.40.2",
         "electron-react-devtools": "^0.5.3",
