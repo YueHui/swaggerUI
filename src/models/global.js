@@ -7,14 +7,15 @@ export default {
 		data:[],
 		current:{},
 		showMode:'single',
-		currentTag:{}
+        currentTag:{},
+        enumData:[]
 	},
 	subscriptions: {},
 	effects:{
 		*getJSON({url},{put,call}){
 			let originData = yield getData(url);
 			originData = JSON.parse(originData);
-			
+			// console.log(originData);
 			let data = [];
 			originData.tags.forEach(tag=>{
 				data.push({
@@ -37,25 +38,45 @@ export default {
 							responses: originData.paths[url].post.responses,
 						})
 					}
-					
+
 				}
-				
+
 			}
-			//console.log(originData,data);
+            //console.log(originData,data);
+            const enums = [];
+            //处理enums
+            for(let i in originData.definitions){
+                if(i.indexOf("API") === 0) continue;
+                let obj = originData.definitions[i];
+                if(!obj.properties) continue;
+                for(let j in obj.properties){
+                    if(obj.properties[j].description && obj.properties[j].enum){
+                        let exists = enums.find(e=> e.description === obj.properties[j].description && e.enum.length === obj.properties[j].enum.length);
+                        if(exists) continue;
+                        enums.push({
+                            description:obj.properties[j].description,
+                            enum:obj.properties[j].enum,
+                            structName:i
+                        });
+                    }
+                }
+            };
+            console.log(enums);
 			yield put({
 				type:"updateData",
 				data,
-				originData
+                originData,
+                enumData:enums
 			})
-			
+
 		},
 		showConsole(){
 			ipcRenderer.send("showConsole");
 		}
 	},
 	reducers:{
-		updateData(state, { data, originData}){
-			return {...state,data,originData}
+		updateData(state, { data, originData, enumData}){
+			return {...state,data,originData, enumData}
 		},
 		updateCurrent(state, {current}){
 			return { ...state, current,showMode:"single"}

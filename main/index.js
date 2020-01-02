@@ -5,14 +5,14 @@ let win;
 
 function createWindow(){
 	win = new BrowserWindow({
-		width:1200, 
-		height:800,
+		width:1200,
+        height:800,
+        title:"swagger ui",
 		webPreferences: {
 			nodeIntegration: true,
 			webSecurity: false
 		}
 	});
-	win.setTitle("codeGenerator");
 	win.on('closed', () => {
 		win = null
 	})
@@ -22,7 +22,7 @@ function createWindow(){
 	}else{
 		win.loadFile('./build/index.html');
 	}
-	
+
 }
 
 ipcMain.on("getData",function(e,url){
