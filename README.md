@@ -16,3 +16,10 @@
 npm start
 ```
 web进程启动完成后刷新electron界面
+
+## changelog
+
+### 2020.1.2
+
+* 修改启动方式
+* 添加枚举显示
