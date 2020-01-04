@@ -1,8 +1,8 @@
 ## 根据swagger文档生成相应代码
 
-界面显示
-
+API 显示界面
 ![软件界面](https://github.com/YueHui/codeGenerator/raw/master/code.jpg)
+Enum 显示界面
 ![软件界面](https://github.com/YueHui/codeGenerator/raw/master/enum.jpg)
 
 
