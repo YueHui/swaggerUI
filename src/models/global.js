@@ -61,7 +61,7 @@ export default {
                     }
                 }
             };
-            console.log(enums);
+            // console.log(enums);
 			yield put({
 				type:"updateData",
 				data,
