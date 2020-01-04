@@ -2,7 +2,8 @@
 
 界面显示
 
-![软件界面](https://github.com/YueHui/codeGenerator/raw/master/code.png)
+![软件界面](https://github.com/YueHui/codeGenerator/raw/master/code.jpg)
+![软件界面](https://github.com/YueHui/codeGenerator/raw/master/enum.jpg)
 
 
 功能介绍:
