@@ -1,4 +1,4 @@
-const {app,BrowserWindow,ipcMain,net} = require("electron");
+const {app,BrowserWindow,ipcMain,net,globalShortcut} = require("electron");
 const isDev = require('electron-is-dev');
 
 let win;
@@ -12,7 +12,7 @@ function createWindow(){
 			nodeIntegration: true,
 			webSecurity: false
 		}
-	});
+    });
 	win.on('closed', () => {
 		win = null
 	})
@@ -21,7 +21,18 @@ function createWindow(){
 		win.webContents.openDevTools();
 	}else{
 		win.loadFile('./build/index.html');
-	}
+    }
+
+    win.on('focus', () => {
+        globalShortcut.register('CommandOrControl+F', function () {
+            if (win && win.webContents) {
+                win.webContents.send('on-find', '')
+            }
+        })
+    })
+    win.on('blur', () => {
+        globalShortcut.unregister('CommandOrControl+F')
+    })
 
 }
 
