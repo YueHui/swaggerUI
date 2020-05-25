@@ -64,6 +64,12 @@ function Apis(props){
         return <ReactJson collapsed={2} name={false} theme="monokai" src={properties} />
     }
 
+    function getMock(key){
+        let schema = props.originData.definitions[key];
+        let mock = generateMock(schema);
+        return <ReactJson collapsed={2} name={false} theme="monokai" src={mock} enableClipboard displayDataTypes={false} />
+    }
+
     function getPropties(schema,key){
         //return schema.properties;
         let result = {};
@@ -104,6 +110,43 @@ function Apis(props){
         return result;
     }
 
+    function generateMock(schema,key){
+        let result = {};
+        for(let i in schema.properties){
+            let name = i;
+            
+            switch(schema.properties[i].type){
+                case "array":
+                    name = name + "|5";
+                    result[name] = [];
+                    if (schema.properties[i].items.originalRef && schema.properties[i].items.originalRef !== key){
+                        result[name].push(generateMock(props.originData.definitions[schema.properties[i].items.originalRef], schema.properties[i].items.originalRef));
+                    }
+                    break;
+                case "integer":
+                    result[name] = "@integer(1,100)"
+                    break;
+                case "string":
+                    result[name] = "@string(10)"
+                    break;
+                case "boolean":
+                    name = name + "|1"
+                    result[name] = "@boolean"
+                    break;
+                case "object":
+                default:
+                    if(schema.properties[i].originalRef){
+                        result[name] = generateMock(props.originData.definitions[schema.properties[i].originalRef], schema.properties[i].originalRef);
+                    }else{
+                        result[name] = 'unknown type';
+                    }
+                    
+            }
+            
+        }
+        return result;
+    }
+
     function showSingle(){
         if (!current.url) return "请选择一个接口";
         return <div>
@@ -112,6 +155,8 @@ function Apis(props){
             {current.parameters && current.parameters[0].schema && getSchema(current.parameters[0].schema.originalRef)}
             <h2>Response:</h2>
             {current.responses && getSchema(current.responses["200"].schema.originalRef)}
+            <h2>Mock:</h2>
+            {current.responses && getMock(current.responses["200"].schema.originalRef)}
             <h2>Code:</h2>
             <Collapse>
                 <Panel key="services" header="Services (可点击复制)">
