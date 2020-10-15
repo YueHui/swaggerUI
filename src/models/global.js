@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { ipcRenderer } from 'electron';
 
 export default {
@@ -14,7 +15,17 @@ export default {
 	effects:{
 		*getJSON({url},{put,call}){
 			let originData = yield getData(url);
-			originData = JSON.parse(originData);
+			try{
+				originData = JSON.parse(originData);
+			}catch(e){
+				message.warn('请求数据错误');
+			}
+			
+
+			if(originData.status === -1){
+				return message.error(originData.msg || '请求发生错误');
+			}
+			
 			// console.log(originData);
 			let data = [];
 			originData.tags.forEach(tag=>{
@@ -99,7 +110,7 @@ function getData(url){
 			resolve(data);
 		})
 		setTimeout(() => {
-			reject();
+			reject({status:-1});
 		}, 5000);
 	})
 }

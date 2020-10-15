@@ -1,5 +1,7 @@
 const {app,BrowserWindow,ipcMain,net,globalShortcut} = require("electron");
 const isDev = require('electron-is-dev');
+//忽略证书错误
+app.commandLine.appendSwitch('ignore-certificate-errors', true);
 
 let win;
 
@@ -37,7 +39,11 @@ function createWindow(){
 }
 
 ipcMain.on("getData",function(e,url){
-	const request = net.request(url)
+	console.log(url);
+	const request = net.request({
+		url,
+		protocol:url.includes('htts')?'https:':'http:'
+	});
 	request.on('response', (response) => {
 		let result = '';
 		console.log(`STATUS: ${response.statusCode}`)
@@ -48,6 +54,10 @@ ipcMain.on("getData",function(e,url){
 			console.log('No more data in response.');
 			e.sender.send('jsonData', result)
 		})
+	})
+	request.on('error',res=>{
+		console.log(res);
+		e.sender.send('jsonData',JSON.stringify({status:-1,msg:'请求失败'}))
 	})
 	request.end()
 })
