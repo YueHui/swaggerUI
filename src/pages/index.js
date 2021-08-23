@@ -34,7 +34,7 @@ function Index(props) {
             <div>
                 文档地址: &nbsp;
                 {getFieldDecorator("jsonURL",{
-                    initialValue:"http://172.16.10.32:8118/v2/api-docs"
+                    initialValue:"http://10.0.2.235:7090/v2/api-docs?group=1-Rest"
                 })(<Input placeholder="swagger文档地址" style={{ width: 200 }} onPressEnter={getJSON} />)}
                 &nbsp;&nbsp;
                 <Button type="primary" onClick={getJSON}>查询</Button>

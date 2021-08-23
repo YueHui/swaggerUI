@@ -1,8 +1,8 @@
 /*
  * @Author: yueHui
  * @Date: 2020-01-02 15:45:51
- * @Last Modified by: yueHui
- * @Last Modified time: 2020-01-02 16:10:25
+ * @Last Modified by: 孔跃辉
+ * @Last Modified time: 2021-08-17 11:42:46
  */
 
 import { Input, Row, Col, Tree, Collapse} from 'antd';
@@ -46,7 +46,7 @@ function Apis(props){
         const afterStr = url.summary.substr(index + searchValue.length);
         return <div>
             {index >= 0 ? <span>{beforeStr}<span style={{ color: '#f50' }}>{searchValue}</span>{afterStr}</span> : url.url === searchValue ? <span style={{ color: '#f50' }}>{url.summary}</span>:url.summary} &nbsp;
-            <span className="blueText" >({url.alias})</span>
+            <span className="blueText" >({url.method})</span>
         </div>
     }
 
@@ -56,6 +56,12 @@ function Apis(props){
             type:"global/updateCurrentTag",
             currentTag:tag
         });
+    }
+
+    function getCommonReq(data){
+        const properties = {};
+        properties[data.name] = data.description;
+        return <ReactJson collapsed={2} name={false} theme="monokai" src={properties} />
     }
 
     function getSchema(key){
@@ -70,7 +76,7 @@ function Apis(props){
         return <ReactJson collapsed={2} name={false} theme="monokai" src={mock} enableClipboard displayDataTypes={false} />
     }
 
-    function getPropties(schema,key){
+    function getPropties(schema = {},key){
         //return schema.properties;
         let result = {};
         for(let i in schema.properties){
@@ -149,10 +155,16 @@ function Apis(props){
 
     function showSingle(){
         if (!current.url) return "请选择一个接口";
+        console.log(current);
         return <div>
-            当前接口：{current.summary}( <span className="blueText" onClick={copy.bind(null,current.url)}>{current.url}</span> )
+            当前接口：[{current.method}] {current.summary}( <span className="blueText" onClick={copy.bind(null,current.url)}>{current.url}</span> )
             <h2>Request:</h2>
-            {current.parameters && current.parameters[0].schema && getSchema(current.parameters[0].schema.originalRef)}
+            {current.parameters && (
+                current.parameters[0].schema ? 
+                getSchema(current.parameters[0].schema.originalRef) : 
+                getCommonReq(current.parameters[0])
+            )}
+
             <h2>Response:</h2>
             {current.responses && getSchema(current.responses["200"].schema.originalRef)}
             <h2>Mock:</h2>

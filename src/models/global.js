@@ -16,9 +16,11 @@ export default {
 		*getJSON({url},{put,call}){
 			let originData = yield getData(url);
 			try{
-				originData = JSON.parse(originData);
+				const temp = originData.replace(/'-'/g,'').replace(/'/g,'"');
+				originData = JSON.parse(temp);
 			}catch(e){
 				message.warn('请求数据错误');
+				return;
 			}
 			
 
@@ -36,22 +38,21 @@ export default {
 				});
 			})
 			for (let url in originData.paths){
-				if (originData.paths[url] && originData.paths[url].post){
-					let tag = data.find(item => originData.paths[url].post.tags.indexOf(item.tagName)>=0);
+				for(let method in originData.paths[url]){
+					let tag = data.find(item => originData.paths[url][method].tags.indexOf(item.tagName)>=0);
 					let strArray = url.split("/");
 					if(tag){
 						tag.urls.push({
 							url,
+							method,
 							alias:strArray[strArray.length-1],
-							description: originData.paths[url].post.description,
-							summary: originData.paths[url].post.summary,
-							parameters: originData.paths[url].post.parameters,
-							responses: originData.paths[url].post.responses,
+							description: originData.paths[url][method].description,
+							summary: originData.paths[url][method].summary,
+							parameters: originData.paths[url][method].parameters,
+							responses: originData.paths[url][method].responses,
 						})
 					}
-
 				}
-
 			}
             //console.log(originData,data);
             const enums = [];
