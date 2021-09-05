@@ -27,6 +27,7 @@ export default {
 			if(originData.status === -1){
 				return message.error(originData.msg || '请求发生错误');
 			}
+			message.success("查询成功");
 			
 			// console.log(originData);
 			let data = [];

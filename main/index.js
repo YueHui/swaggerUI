@@ -1,5 +1,6 @@
 const {app,BrowserWindow,ipcMain,net,globalShortcut} = require("electron");
 const isDev = require('electron-is-dev');
+const storage = require('./storage');
 //忽略证书错误
 app.commandLine.appendSwitch('ignore-certificate-errors', true);
 
@@ -35,7 +36,6 @@ function createWindow(){
     win.on('blur', () => {
         globalShortcut.unregister('CommandOrControl+F')
     })
-
 }
 
 ipcMain.on("getData",function(e,url){
@@ -66,6 +66,18 @@ ipcMain.on("showConsole",function(){
 	if(win !== null){
 		win.webContents.openDevTools();
 	}
+})
+
+ipcMain.on("addDoc",function(e,data){
+	const d = JSON.parse(data);
+	storage.addDoc(d);
+	const docList = storage.getDocList();
+	e.sender.send('docList',JSON.stringify(docList));
+})
+
+ipcMain.on("getDocList",function(e){
+	const docList = storage.getDocList();
+	e.sender.send('docList',JSON.stringify(docList));
 })
 
 app.on('ready', createWindow);
