@@ -78,24 +78,21 @@ function Apis(props){
     }
 
     function getTypeStr(schema,init,key){
-        if(init){
-            console.log("xxx",schema)
-        }
         let result = init?`
-            /**
-             * ${current.summary}
-             * @url ${current.url}
-             */
-            interface InterfaceName {
+    /**
+     * ${current.summary}
+     * @url ${current.url}
+     */
+    export interface InterfaceName {
         `:"";
         for(let i in schema.properties){
             let name = i;
             result += `
-                /*
-                 * ${schema.properties[i].description}
-                 */
-                ${name}: ${schema.properties[i].type}
-            `
+        /**
+         * ${schema.properties[i].description}
+         */
+        ${name}: ${schema.properties[i].type}
+    `
         }
         result+= `}`
         return result;
@@ -202,7 +199,10 @@ function Apis(props){
 
             <h2>Response:</h2>
             {current.responses && getSchema(current.responses["200"].schema.originalRef)}
-            <h2>Types</h2>
+            <div>
+                <h2 style={{display:'inline-block',marginRight:20}} >Types</h2>
+                <span className="blueText" onClick={()=>copy(getTypes(current.responses["200"].schema.originalRef))}>复制</span>
+            </div>
             <SyntaxHighlighter language="typescript" >
                 {current.responses && getTypes(current.responses["200"].schema.originalRef)}
             </SyntaxHighlighter>
