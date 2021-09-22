@@ -22,13 +22,13 @@ export default {
 				message.warn('请求数据错误');
 				return;
 			}
-			
+
 
 			if(originData.status === -1){
 				return message.error(originData.msg || '请求发生错误');
 			}
 			message.success("查询成功");
-			
+
 			// console.log(originData);
 			let data = [];
 			originData.tags.forEach(tag=>{
@@ -55,7 +55,7 @@ export default {
 					}
 				}
 			}
-            //console.log(originData,data);
+            console.log(originData,data);
             const enums = [];
             //处理enums
             for(let i in originData.definitions){

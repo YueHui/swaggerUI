@@ -20,7 +20,6 @@ function Index(props) {
     useEffect(()=>{
         ipcRenderer.send("getDocList");
         ipcRenderer.on("docList",function(e,data){
-            console.log(JSON.parse(data))
             setDocList(JSON.parse(data));
         })
     },[])

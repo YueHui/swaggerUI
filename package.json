@@ -1,6 +1,6 @@
 {
     "name": "codegenerator",
-    "version": "1.5.0",
+    "version": "1.6.0",
     "description": "",
     "main": "main/index.js",
     "scripts": {
@@ -44,7 +44,8 @@
         "electron-is-dev": "^1.1.0",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
-        "react-json-view": "^1.19.1"
+        "react-json-view": "^1.19.1",
+        "react-syntax-highlighter": "^15.4.4"
     },
     "devDependencies": {
         "babel-eslint": "^9.0.0",

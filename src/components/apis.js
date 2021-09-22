@@ -13,6 +13,7 @@ import Effect from './effect';
 import Reducer from './reducer';
 import {copy} from '../util/util';
 import styles from './styles.less';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -76,6 +77,40 @@ function Apis(props){
         return <ReactJson collapsed={2} name={false} theme="monokai" src={mock} enableClipboard displayDataTypes={false} />
     }
 
+    function getTypeStr(schema,init,key){
+        if(init){
+            console.log("xxx",schema)
+        }
+        let result = init?`
+            /**
+             * ${current.summary}
+             * @url ${current.url}
+             */
+            interface InterfaceName {
+        `:"";
+        for(let i in schema.properties){
+            let name = i;
+            result += `
+                /*
+                 * ${schema.properties[i].description}
+                 */
+                ${name}: ${schema.properties[i].type}
+            `
+        }
+        result+= `}`
+        return result;
+    }
+
+    function getTypes(key){
+
+        let schema = props.originData.definitions[key];
+        console.log(key,schema);
+        let result = schema.properties.result || {};
+        let typeString = getTypeStr(result.items?props.originData.definitions[result.items.originalRef]:{},true);
+        return typeString;
+    }
+
+
     function getPropties(schema = {},key){
         //return schema.properties;
         let result = {};
@@ -120,7 +155,7 @@ function Apis(props){
         let result = {};
         for(let i in schema.properties){
             let name = i;
-            
+
             switch(schema.properties[i].type){
                 case "array":
                     name = name + "|5";
@@ -146,9 +181,9 @@ function Apis(props){
                     }else{
                         result[name] = 'unknown type';
                     }
-                    
+
             }
-            
+
         }
         return result;
     }
@@ -160,13 +195,17 @@ function Apis(props){
             当前接口：[{current.method}] {current.summary}( <span className="blueText" onClick={copy.bind(null,current.url)}>{current.url}</span> )
             <h2>Request:</h2>
             {current.parameters && (
-                current.parameters[0].schema ? 
-                getSchema(current.parameters[0].schema.originalRef) : 
+                current.parameters[0].schema ?
+                getSchema(current.parameters[0].schema.originalRef) :
                 getCommonReq(current.parameters[0])
             )}
 
             <h2>Response:</h2>
             {current.responses && getSchema(current.responses["200"].schema.originalRef)}
+            <h2>Types</h2>
+            <SyntaxHighlighter language="typescript" >
+                {current.responses && getTypes(current.responses["200"].schema.originalRef)}
+            </SyntaxHighlighter>
             <h2>Mock:</h2>
             {current.responses && getMock(current.responses["200"].schema.originalRef)}
             <h2>Code:</h2>
