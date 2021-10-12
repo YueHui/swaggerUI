@@ -50,7 +50,7 @@
     "devDependencies": {
         "babel-eslint": "^9.0.0",
         "concurrently": "^5.0.2",
-        "electron": "^9.4.0",
+        "electron": "^11.5.0",
         "electron-builder": "^22.11.7",
         "electron-react-devtools": "^0.5.3",
         "eslint": "^5.4.0",
